@@ -1,11 +1,11 @@
 <div class="dropdown dropdown-end group">
-  <div class="btn m-1 btn-primary flex items-center gap-2" tabindex="0" role="button">
+  <div class="btn m-1 btn-primary" tabindex="0" role="button">
     <%= text %>
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down transition-transform duration-300 ease-out group-focus-within:rotate-180">
       <path d="m6 9 6 6 6-6" />
     </svg>
   </div>
-  <ul class="dropdown-content menu bg-base-100 rounded-box z-1 w-48 shadow-lg flex flex-col gap-2 border border-neutral-100" tabindex="-1">
+  <ul class="dropdown-content menu bg-base-100 rounded-box w-48 shadow-lg border border-neutral-100" tabindex="-1">
     <% options.forEach(option => { %>
     <a href="<%= option.href %>" class="hover:bg-neutral-100 py-4 px-2">
       <li><%= option.label %></li>
