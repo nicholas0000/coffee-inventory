@@ -108,10 +108,19 @@ const countItemsInCategory = async (categoryId) => {
 	return rows[0].count;
 };
 
+const deleteCategoryAndOrphanItems = async (categoryId) => {
+	await pool.query(
+		"UPDATE items SET category_id = NULL WHERE category_id = $1;",
+		[categoryId],
+	);
+	await pool.query("DELETE FROM categories WHERE id = $1;", [categoryId]);
+};
+
 module.exports = {
 	addCategory,
 	addItem,
 	countItemsInCategory,
+	deleteCategoryAndOrphanItems,
 	deleteItem,
 	getAllCategories,
 	getAllItems,

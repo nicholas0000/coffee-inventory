@@ -68,3 +68,9 @@ exports.editCategoryGet = async (req, res) => {
 		compositeItems: allItemsInCategory,
 	});
 };
+
+exports.deleteCategoryPost = async (req, res) => {
+	const { id: categoryId } = req.params;
+	await db.deleteCategoryAndOrphanItems(categoryId);
+	res.redirect("/categories");
+};

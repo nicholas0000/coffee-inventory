@@ -6,17 +6,17 @@
         <path d="M3 6h18" />
         <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
       </svg>
-      <h1 class="text-2xl">Deleting item</h1>
+      <h1 class="text-2xl"><%= title %></h1>
     </div>
     <p class="px-6">
-      You're about to delete this item. This action cannot be undone. Are
-      you sure you would like to delete it?
+      <%= message %>
     </p>
     <div class="modal-action border border-base-200 p-6">
-      <form action="/items/<%= itemId %>/delete" method="POST" class="flex gap-2 w-full">
+      <form action="<%= route %>" method="POST" class="flex gap-2 w-full">
         <button type="button" class="cancel-btn btn bg-white text-gray-500 border-gray-400">No, keep it</button>
         <button type="submit" class="btn btn-error text-white">Yes, delete</button>
       </form>
     </div>
   </div>
 </dialog>
+<script src="/js/deleteItemScript.js"></script>

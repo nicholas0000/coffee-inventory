@@ -6,7 +6,6 @@
   <input type="submit" form="item-form" value="Save" class="btn btn-primary" />
   <button type="button" class="btn bg-white text-gray-500 border-gray-400" onclick="history.back()">Cancel</button>
 </footer>
-<%- include("../components/deleteModal", { itemId: item.id }) %>
+<%- include("../components/modals/deleteItemModal.ejs", { itemId: item.id }) %>
 
 <script src="/js/editItemScript.js"></script>
-<script src="/js/deleteItemScript.js"></script>
