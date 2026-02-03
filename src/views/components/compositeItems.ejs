@@ -1,38 +1,25 @@
-<section class="flex-2 flex flex-col gap-4">
-  <header class="w-full grid justify-items-end px-8">
-    <%- include("./buttonTriggeredDropdown", { text: "Add item", options: [{ label: "Add new item", href: `/items/new?referredCategoryId=${categoryId}` }, { label: "Add existing item", href: "#" }]}) %>
-  </header>
+<section class="py-8">
   <div class="overflow-x-auto">
     <table class="table table-auto">
       <thead class="uppercase bg-neutral-200 text-neutral-600">
-        <tr>
-          <th>Item name</th>
+        <tr class="py-4">
+          <th class="pl-8">Item name</th>
           <th>SKU</th>
           <th>Weight</th>
           <th>Roastery</th>
           <th>Selling price ($AUD)</th>
           <th>Stock on hand</th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
         <% compositeItems.forEach(item => { %>
-        <tr onclick="window.location='<%= `/items/${item.id}` %>'" aria-label="See more details of item" class="hover:bg-neutral-100 hover:cursor-pointer">
-          <td><%= item.name %></td>
+        <tr onclick="window.location='<%= `/items/${item.id}?referredCategoryId=${categoryId}` %>'" aria-label="See more details of item" class="hover:bg-neutral-100 hover:cursor-pointer">
+          <td class="pl-8 py-4"><%= item.name %></td>
           <td><%= item.sku %></td>
           <td><%= Math.round(item.size_grams) %>g</td>
           <td><%= item.roastery %></td>
           <td><%= item.price_dollars %> <span class="decorative-text">/unit</span></td>
           <td><%= item.stock_quantity %></td>
-          <td class="grid pr-10">
-            <button class="btn btn-circle btn-ghost justify-center" aria-label="Remove item from this category">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-icon lucide-trash stroke-error">
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                <path d="M3 6h18" />
-                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-              </svg>
-            </button>
-          </td>
         </tr>
         <%}); %>
       </tbody>

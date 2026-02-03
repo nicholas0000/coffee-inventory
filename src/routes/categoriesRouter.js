@@ -8,7 +8,16 @@ categoriesRouter.get("/", categoriesController.getAllCategories);
 categoriesRouter.get("/new", categoriesController.createCategoryGet);
 categoriesRouter.post("/new", categoriesController.createCategoryPost);
 
-categoriesRouter.get("/:id", categoriesController.editCategoryGet);
+categoriesRouter.get("/:id", categoriesController.categoryGet);
+
+categoriesRouter.get(
+	"/:id/edit-details",
+	categoriesController.editCategoryDetailsGet,
+);
+categoriesRouter.post(
+	"/:id/edit-details/save",
+	categoriesController.editCategoryDetailsPost,
+);
 
 categoriesRouter.post("/:id/delete", categoriesController.deleteCategoryPost);
 

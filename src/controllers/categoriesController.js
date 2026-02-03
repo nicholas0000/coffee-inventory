@@ -54,7 +54,7 @@ exports.createCategoryPost = [
 	},
 ];
 
-exports.editCategoryGet = async (req, res) => {
+exports.categoryGet = async (req, res) => {
 	const { id: categoryId } = req.params;
 	const category = await db.getCategoryById(categoryId);
 	if (category === null)
@@ -62,12 +62,45 @@ exports.editCategoryGet = async (req, res) => {
 
 	const allItemsInCategory = await getItemsInCategory(categoryId);
 
-	res.render("pages/editCategory", {
+	res.render("pages/category", {
 		title: category.name,
 		category,
 		compositeItems: allItemsInCategory,
 	});
 };
+
+exports.editCategoryDetailsGet = async (req, res) => {
+	const { id: categoryId } = req.params;
+	const category = await db.getCategoryById(categoryId);
+	if (category === null)
+		throw new CustomNotFoundError(`Category with id ${categoryId} not found`);
+
+	res.render("pages/editCategory", {
+		title: category.name,
+		category,
+	});
+};
+
+exports.editCategoryDetailsPost = [
+	validateCategory,
+	async (req, res) => {
+		const { id: categoryId } = req.params;
+		const fetchedCategory = await db.getCategoryById(categoryId);
+
+		const errors = validationResult(req);
+		if (!errors.isEmpty())
+			return res.status(400).render("pages/editCategory", {
+				title: fetchedCategory.name,
+				category: fetchedCategory,
+				errors: errors.array(),
+			});
+
+		const categoryFormValues = matchedData(req);
+
+		await db.updateCategoryDetails(categoryId, categoryFormValues);
+		res.redirect(`/categories/${categoryId}`);
+	},
+];
 
 exports.deleteCategoryPost = async (req, res) => {
 	const { id: categoryId } = req.params;
