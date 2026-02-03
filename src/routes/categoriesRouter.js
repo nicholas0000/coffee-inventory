@@ -18,6 +18,14 @@ categoriesRouter.post(
 	"/:id/edit-details/save",
 	categoriesController.editCategoryDetailsPost,
 );
+categoriesRouter.get(
+	"/:id/edit-items",
+	categoriesController.editItemsInCategoryGet,
+);
+categoriesRouter.post(
+	"/:id/edit-items/save",
+	categoriesController.editItemsInCategoryPost,
+);
 
 categoriesRouter.post("/:id/delete", categoriesController.deleteCategoryPost);
 

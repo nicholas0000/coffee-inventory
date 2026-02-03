@@ -75,7 +75,7 @@ exports.editCategoryDetailsGet = async (req, res) => {
 	if (category === null)
 		throw new CustomNotFoundError(`Category with id ${categoryId} not found`);
 
-	res.render("pages/editCategory", {
+	res.render("pages/editCategoryDetails", {
 		title: category.name,
 		category,
 	});
@@ -89,7 +89,7 @@ exports.editCategoryDetailsPost = [
 
 		const errors = validationResult(req);
 		if (!errors.isEmpty())
-			return res.status(400).render("pages/editCategory", {
+			return res.status(400).render("pages/editCategoryDetails", {
 				title: fetchedCategory.name,
 				category: fetchedCategory,
 				errors: errors.array(),
@@ -101,6 +101,42 @@ exports.editCategoryDetailsPost = [
 		res.redirect(`/categories/${categoryId}`);
 	},
 ];
+
+exports.editItemsInCategoryGet = async (req, res) => {
+	const { id: categoryId } = req.params;
+	const categoryName = await db.getCategoryNameById(categoryId);
+	if (categoryName === null)
+		throw new CustomNotFoundError(`Category with id ${categoryId} not found`);
+
+	const allItems = await db.getAllItems();
+
+	res.render("pages/editItemsInCategory", {
+		title: "Manage items",
+		items: allItems,
+		category: { id: categoryId, name: categoryName },
+	});
+};
+
+exports.editItemsInCategoryPost = async (req, res) => {
+	const { id: categoryId } = req.params;
+	const currentItemsInCategory = await db.getItemsInCategory(categoryId);
+	const currentItemIdsInCategory = new Set(
+		currentItemsInCategory.map((item) => Number(item.id)),
+	);
+
+	const { itemIds } = req.body;
+	const itemIdsFromTable = new Set(itemIds.map((id) => Number(id)));
+
+	const itemIdsToAdd = [...itemIdsFromTable].filter(
+		(id) => !currentItemIdsInCategory.has(id),
+	);
+	const itemIdsToRemove = [...currentItemIdsInCategory].filter(
+		(id) => !itemIdsFromTable.has(id),
+	);
+
+	await db.updateCategoriesOfItems(itemIdsToAdd, itemIdsToRemove, categoryId);
+	res.redirect(`/categories/${categoryId}`);
+};
 
 exports.deleteCategoryPost = async (req, res) => {
 	const { id: categoryId } = req.params;

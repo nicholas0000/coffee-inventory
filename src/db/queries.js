@@ -99,6 +99,16 @@ const getItemsInCategory = async (categoryId) => {
 	return rows;
 };
 
+const getCategoryNameById = async (categoryId) => {
+	const { rows } = await pool.query(
+		"SELECT name FROM categories WHERE id = $1;",
+		[categoryId],
+	);
+
+	if (rows.length === 0) return null;
+	return rows[0].name;
+};
+
 const countItemsInCategory = async (categoryId) => {
 	const { rows } = await pool.query(
 		"SELECT COUNT(id) AS count FROM items WHERE category_id = $1",
@@ -125,6 +135,26 @@ const updateCategoryDetails = async (categoryId, formValues) => {
 	);
 };
 
+const updateCategoriesOfItems = async (
+	itemIdsToAddToCategoryId,
+	itemIdsToRemoveFromCategoryId,
+	categoryId,
+) => {
+	const itemIdsToAdd = [...itemIdsToAddToCategoryId];
+	const itemIdsToRemove = [...itemIdsToRemoveFromCategoryId];
+
+	if (itemIdsToAdd.length > 0)
+		await pool.query("UPDATE items SET category_id = $1 WHERE id = ANY($2)", [
+			categoryId,
+			itemIdsToAdd,
+		]);
+
+	if (itemIdsToRemove.length > 0)
+		await pool.query("UPDATE items SET category_id = NULL WHERE id = ANY($1)", [
+			itemIdsToRemove,
+		]);
+};
+
 module.exports = {
 	addCategory,
 	addItem,
@@ -134,8 +164,10 @@ module.exports = {
 	getAllCategories,
 	getAllItems,
 	getCategoryById,
+	getCategoryNameById,
 	getItemById,
 	getItemsInCategory,
 	updateCategoryDetails,
+	updateCategoriesOfItems,
 	updateItemById,
 };

@@ -1,0 +1,49 @@
+<%- include("../components/pageHeaders/pageHeaderWithAdd.ejs", { heading: "Manage items", button: { text: "Add new item", route: `/items/new?referredCategoryId=${category.id}`} }) %>
+
+<p class="px-8 -mt-6 mb-4">
+  Modify the items in the category:
+  "<span class="font-bold text-secondary"><%= category.name %></span>"
+</p>
+
+<form class="overflow-x-auto flex-1" method="POST" action="/categories/<%= category.id %>/edit-items/save" id="composite-items-form">
+  <table class="table table-fixed">
+    <thead class="bg-neutral-200 text-neutral-600 uppercase">
+      <tr>
+        <th class="w-16">
+          <label>
+            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm">
+          </label>
+        </th>
+        <th>Name</th>
+        <th>SKU</th>
+        <th>Weight</th>
+        <th>Roastery</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% items.forEach(item => { %>
+      <tr onclick="window.location='<%= `/items/${item.id}?referredCategoryId=${category.id}` %>'" aria-label="See more details of item" role="button" class="hover:cursor-pointer hover:bg-neutral-100" data-item-id="<%= item.id %>">
+        <th class="w-16">
+          <label>
+            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" <%= Number(item["category_id"]) === Number(category.id) 
+                  ? "checked" 
+                  : "" 
+                %> name="itemIds" value="<%= item.id %>">
+          </label>
+        </th>
+        <td><%= item.name %></td>
+        <td><%= item.sku %></td>
+        <td><%= Math.round(item.size_grams) %>g</td>
+        <td><%= item.roastery %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</form>
+<footer class="flex gap-2 border border-base-200 p-6">
+  <input type="submit" value="Save" form="composite-items-form" class="btn btn-primary">
+  <a href="/categories/<%= category.id %>" role="button" class="btn border-gray-400 bg-white text-gray-500">
+    Cancel
+  </a>
+</footer>
+<script src="/js/editItemsInCategoryScript.js"></script>
