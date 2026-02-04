@@ -31,7 +31,7 @@ const getPathsForEditItemPage = (req) => {
 
 	if (!referredCategoryId) return paths;
 	paths.submit =
-		`/items/${itemId}/update` +
+		paths.submit +
 		`?referredCategoryId=${referredCategoryId}` +
 		`&fromPage=${fromPage}`;
 

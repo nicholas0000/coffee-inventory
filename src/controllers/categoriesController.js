@@ -125,7 +125,8 @@ exports.editItemsInCategoryPost = async (req, res) => {
 	);
 
 	const { itemIds } = req.body;
-	const itemIdsFromTable = new Set(itemIds.map((id) => Number(id)));
+	const itemIdsArray = [...itemIds];
+	const itemIdsFromTable = new Set(itemIdsArray.map((id) => Number(id)));
 
 	const itemIdsToAdd = [...itemIdsFromTable].filter(
 		(id) => !currentItemIdsInCategory.has(id),
