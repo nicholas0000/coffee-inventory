@@ -1,14 +1,13 @@
 const selectAllCheckbox = document.querySelector("thead .checkbox");
-const rowCheckboxes = document.querySelectorAll("tbody .checkbox");
+let rowCheckboxes = document.querySelectorAll("tbody .checkbox");
 
-const allCheckboxesChecked = [...rowCheckboxes].every(
-	(checkbox) => checkbox.checked,
-);
-const someCheckboxesChecked = [...rowCheckboxes].some(
-	(checkbox) => checkbox.checked,
-);
+const allCheckboxesChecked = (rowCheckboxes) =>
+	[...rowCheckboxes].every((checkbox) => checkbox.checked);
+const someCheckboxesChecked = (rowCheckboxes) =>
+	[...rowCheckboxes].some((checkbox) => checkbox.checked);
 
 const handleChangeOnSelectAllCheckbox = (e) => {
+	const rowCheckboxes = document.querySelectorAll("tbody .checkbox");
 	const selectAll = e.currentTarget;
 
 	for (const checkbox of rowCheckboxes) {
@@ -20,18 +19,21 @@ const handleChangeOnSelectAllCheckbox = (e) => {
 const handleClickOnRowCheckbox = (e) => {
 	e.stopPropagation();
 
-	if (someCheckboxesChecked) {
-		selectAllCheckbox.indeterminate = true;
+	rowCheckboxes = document.querySelectorAll("tbody .checkbox");
+
+	if (allCheckboxesChecked(rowCheckboxes)) {
+		selectAllCheckbox.indeterminate = false;
+		selectAllCheckbox.checked = true;
 		return;
 	}
 
-	if (allCheckboxesChecked) selectAllCheckbox.checked = true;
-	else selectAllCheckbox.checked = false;
-	selectAllCheckbox.indeterminate = false;
+	selectAllCheckbox.indeterminate = someCheckboxesChecked(rowCheckboxes);
+	selectAllCheckbox.checked = false;
 };
 
 /* MAIN */
-if (someCheckboxesChecked) selectAllCheckbox.indeterminate = true;
+if (someCheckboxesChecked(rowCheckboxes))
+	selectAllCheckbox.indeterminate = true;
 
 selectAllCheckbox.addEventListener("change", handleChangeOnSelectAllCheckbox);
 
