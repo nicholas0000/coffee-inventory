@@ -13,18 +13,33 @@ const getItemById = async (itemId) => {
 	return item;
 };
 
-const getRoutes = async (referredCategoryId) => {
-	const routes = {};
+const getPathsForNewItemPage = (req) => {
+	const { referredCategoryId } = req.query;
+	const paths = { submit: "/items/new", previousPage: "/items" };
+	if (referredCategoryId) {
+		paths.submit = `/items/new?referredCategoryId=${referredCategoryId}`;
+		paths.previousPage = `/categories/${referredCategoryId}/edit-items`;
+	}
 
-	routes.formSubmitRoute = referredCategoryId
-		? `/items/new?referredCategoryId=${referredCategoryId}`
-		: "/items/new";
+	return paths;
+};
 
-	routes.redirectRoute = referredCategoryId
-		? `/categories/${referredCategoryId}`
-		: "/items";
+const getPathsForEditItemPage = (req) => {
+	const { referredCategoryId, fromPage } = req.query;
+	const { id: itemId } = req.params;
+	const paths = { submit: `/items/${itemId}/update`, previousPage: "/items" };
 
-	return routes;
+	if (!referredCategoryId) return paths;
+	paths.submit =
+		`/items/${itemId}/update` +
+		`?referredCategoryId=${referredCategoryId}` +
+		`&fromPage=${fromPage}`;
+
+	if (fromPage.includes("edit"))
+		paths.previousPage = `/categories/${referredCategoryId}/edit-items`;
+	else paths.previousPage = `/categories/${referredCategoryId}`;
+
+	return paths;
 };
 
 exports.getAllItems = async (_req, res) => {
@@ -42,13 +57,11 @@ exports.getAllItems = async (_req, res) => {
 };
 
 exports.createItemGet = async (req, res) => {
-	const { referredCategoryId } = req.query;
-
-	const routes = await getRoutes(referredCategoryId);
+	const paths = getPathsForNewItemPage(req);
 
 	res.render("pages/newItem", {
 		title: "Create new item",
-		routes,
+		paths,
 	});
 };
 
@@ -56,13 +69,13 @@ exports.createItemPost = [
 	validateItem,
 	async (req, res) => {
 		const { referredCategoryId } = req.query;
-		const routes = await getRoutes(referredCategoryId);
+		const paths = getPathsForNewItemPage(req);
 
 		const errors = validationResult(req);
 		if (!errors.isEmpty())
 			return res
 				.status(400)
-				.render("pages/newItem", { errors: errors.array(), routes });
+				.render("pages/newItem", { errors: errors.array(), paths });
 
 		const { price_dollars, ...unchangedFormInputsAndValues } = matchedData(req);
 		const formInputsAndValues = {
@@ -72,7 +85,7 @@ exports.createItemPost = [
 		};
 
 		await db.addItem(formInputsAndValues);
-		res.redirect(routes.redirectRoute);
+		res.redirect(paths.previousPage);
 	},
 ];
 
@@ -80,7 +93,13 @@ exports.editItemGet = async (req, res) => {
 	const { id: itemId } = req.params;
 	const fetchedItem = await getItemById(itemId);
 
-	res.render("pages/editItem", { title: fetchedItem.name, item: fetchedItem });
+	const paths = getPathsForEditItemPage(req);
+
+	res.render("pages/editItem", {
+		title: fetchedItem.name,
+		item: fetchedItem,
+		paths,
+	});
 };
 
 exports.editItemPost = [
@@ -89,11 +108,14 @@ exports.editItemPost = [
 		const { id: itemId } = req.params;
 		const fetchedItem = await getItemById(itemId);
 
+		const paths = getPathsForEditItemPage(req);
+
 		const errors = validationResult(req);
 		if (!errors.isEmpty())
 			return res.status(400).render("pages/editItem", {
 				item: fetchedItem,
 				errors: errors.array(),
+				paths,
 			});
 
 		const { price_dollars, ...unchangedFormInputsAndValues } = matchedData(req);
@@ -104,7 +126,7 @@ exports.editItemPost = [
 		};
 
 		await db.updateItemById(itemId, formInputsAndValues);
-		res.redirect("/items");
+		res.redirect(paths.previousPage);
 	},
 ];
 

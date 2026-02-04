@@ -1,10 +1,10 @@
-<%- include("../components/pageHeaders/pageHeaderWithDelete.ejs", { type: "item" }) %>
+<%- include("../components/pageHeaders/pageHeaderWithDelete.ejs", { type: "item", closeButtonPath: paths.previousPage }) %>
 <section class="px-8 flex-1">
-  <%- include("../components/forms/itemForm", { item, formSubmitRoute: `/items/${item.id}/update`}) %>
+  <%- include("../components/forms/itemForm", { item, formSubmitRoute: paths.submit}) %>
 </section>
 <footer class="flex gap-2 p-6 border border-base-200">
   <input type="submit" form="item-form" value="Save" class="btn btn-primary" />
-  <button type="button" class="btn bg-white text-gray-500 border-gray-400" onclick="history.back()">Cancel</button>
+  <a role="button" class="btn bg-white text-gray-500 border-gray-400 cancel-btn" href="<%= paths.previousPage %>">Cancel</a>
 </footer>
 <%- include("../components/modals/deleteItemModal.ejs", { itemId: item.id }) %>
 

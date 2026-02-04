@@ -30,5 +30,5 @@
 <section class="px-8 max-w-3xl -mt-4">
   <p><%= category.description %></p>
 </section>
-<%- include("../components/compositeItems", { categoryId: category.id, compositeItems }) %>
+<%- include("../components/compositeItems", { categoryId: category.id, compositeItems, fromPageName: "category" }) %>
 <%- include ("../components/modals/deleteCategoryModal.ejs", { categoryId: category.id }) %>

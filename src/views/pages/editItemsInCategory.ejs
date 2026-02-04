@@ -22,7 +22,7 @@
     </thead>
     <tbody>
       <% items.forEach(item => { %>
-      <tr onclick="window.location='<%= `/items/${item.id}?referredCategoryId=${category.id}` %>'" aria-label="See more details of item" role="button" class="hover:cursor-pointer hover:bg-neutral-100" data-item-id="<%= item.id %>">
+      <tr onclick="window.location='<%= `/items/${item.id}?referredCategoryId=${category.id}&fromPage=editItemsInCategory` %>'" aria-label="See more details of item" role="button" class="hover:cursor-pointer hover:bg-neutral-100" data-item-id="<%= item.id %>">
         <th class="w-16">
           <label>
             <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" <%= Number(item["category_id"]) === Number(category.id) 

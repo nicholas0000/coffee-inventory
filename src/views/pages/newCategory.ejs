@@ -1,9 +1,9 @@
-<%- include("../components/pageHeaders/pageHeaderWithClose.ejs", { heading: "New category"}) %>
+<%- include("../components/pageHeaders/pageHeaderWithClose.ejs", { heading: "New category", closeButtonPath: "/categories"}) %>
 <section class="px-8 flex-1">
   <%- include("../components/errorsList") %>
   <%- include("../components/forms/categoryForm", { route: "/categories/new"}) %>
 </section>
 <footer class="flex gap-2 p-6 border border-base-200">
   <input type="submit" form="category-form" value="Save" class="btn btn-primary" />
-  <button type="button" class="btn bg-white text-gray-500 border-gray-400" onclick="history.back()">Cancel</button>
+  <a role="button" class="btn bg-white text-gray-500 border-gray-400" href="/categories">Cancel</a>
 </footer>
