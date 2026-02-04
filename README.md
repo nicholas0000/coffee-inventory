@@ -1,3 +1,4 @@
 - ensure to CREATE DATABASE locally first otherwise the `populatedb` script won't work. in your .env add your postgres username (as `USER_NAME`) and password (`PASSWORD`) to ensure local environment of db works.
 - all icons are from [lucide icons](https://lucide.dev/icons/)
 - blank avatar image from [vecteezy](https://www.vecteezy.com/vector-art/45944199-male-default-placeholder-avatar-profile-gray-picture-isolated-on-background-man-silhouette-picture-for-user-profile-in-social-media-forum-chat-greyscale-illustration)
+- favicon and icon of app from favicon
