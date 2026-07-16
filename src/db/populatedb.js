@@ -39,12 +39,15 @@ VALUES
 `;
 
 async function main() {
-	const localDatabaseUrl = `postgresql://${process.env.USER_NAME}:${process.env.PASSWORD}@localhost:5432/${DATABASE_NAME}`;
+	const databaseUrl = process.env.DATABASE_URL;
 
 	console.log("seeding...");
 	const client = new Client({
-		connectionString: localDatabaseUrl,
-	});
+	connectionString: databaseUrl,
+	ssl: {
+		rejectUnauthorized: false,
+	},
+});
 
 	await client.connect();
 	await client.query(CREATE_TABLES_QUERY);
