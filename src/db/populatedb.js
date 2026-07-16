@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 require("dotenv").config();
 const { Client } = require("pg");
-const { DATABASE_NAME } = require("./constants");
 
 const CREATE_TABLES_QUERY = `
 CREATE TABLE IF NOT EXISTS categories (
@@ -43,11 +42,11 @@ async function main() {
 
 	console.log("seeding...");
 	const client = new Client({
-	connectionString: databaseUrl,
-	ssl: {
-		rejectUnauthorized: false,
-	},
-});
+		connectionString: databaseUrl,
+		ssl: {
+			rejectUnauthorized: false,
+		},
+	});
 
 	await client.connect();
 	await client.query(CREATE_TABLES_QUERY);
